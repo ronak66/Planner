@@ -299,14 +299,67 @@ const SLOTS = [
   {key:"side", label:"Side / Snack", from:["sides"]}
 ];
 
+/* ---------- photo map (files committed in /photos) ---------- */
+const PHOTO = {
+  "Boiled egg & bread":"photos/images.jpeg",
+  "Poha":"photos/poha.webp",
+  "Aloo / veg sandwich":"photos/sandwich.jpg",
+  "Idli":"photos/idli.webp",
+  "Uttapam":"photos/uttapam-recipe-swasthi.jpg",
+  "Sevaiya (vermicelli)":"photos/maxresdefault.jpg",
+  "Besan cheela":"photos/besan%20chelia.jpeg",
+  "Banana milkshake":"photos/banana-milkshake-one.jpg",
+  "Aloo / paneer paratha":"photos/aloo%20paratha.jpg",
+  "Aloo gobi":"photos/Aloo-gobi-2.jpg",
+  "Matar sabji":"photos/matar%20sabji.jpg",
+  "Aloo matar":"photos/Aloo-matar.jpg",
+  "Moong sabzi":"photos/moong%20sabzi.jpg",
+  "Dum aloo":"photos/dum%20aloo.jpg",
+  "Aloo beans":"photos/aloo%20beans.jpeg",
+  "Aloo jeera":"photos/aloo%20jeera.webp",
+  "Palak paneer":"photos/Palak-Paneer-500x500.webp",
+  "Paneer butter masala":"photos/Paneer-Butter-Masala-Restaurant-Style.jpg",
+  "Bhindi ki sabzi":"photos/aloo%20bhindi.jpg",
+  "Cabbage":"photos/cabbage-peas-featured-500x375.webp",
+  "Chole":"photos/chole.jpg",
+  "Rajma":"photos/rajma.jpg",
+  "Mix veg":"photos/mix%20veg.jpg",
+  "Sev tamatar":"photos/sev%20tamatar.jpg",
+  "Black channe":"photos/kala-chana-recipe.jpg",
+  "Daal":"photos/daal%20chawal.jpeg",
+  "Daal makhani":"photos/daal%20makahni.jpeg",
+  "Kadhi":"photos/KadhiChawal.webp",
+  "Pav bhaji":"photos/Best-Pav-Bhaji-Recipe.webp",
+  "Noodles":"photos/noodles.jpeg",
+  "Pasta":"photos/pasta.webp",
+  "Dosa":"photos/dosa.jpg",
+  "Aloo paratha":"photos/aloo%20paratha.jpg",
+  "Baigan ka bharta":"photos/baingan-bharta-eggplant-bharta-recipe.webp",
+  "Pani puri":"photos/pani-puri.jpg",
+  "Rava idli + aloo sabji":"photos/rava%20idli.webp",
+  "Poori + aloo sabji":"photos/poori%20aloo.jpg",
+  "Paneer chili":"photos/chilli-paneer-recipe.jpg",
+  "Tawa pullao":"photos/tawa%20pulloa.jpeg",
+  "Pizza":"photos/pizza.jpg",
+  "Egg fried rice":"photos/egg%20fried%20rice.webp",
+  "Channa jor chaat":"photos/channa%20jor.jpg",
+  "Sprouts chaat":"photos/sprout%20chaat.webp",
+  "Fruits in curd":"photos/fruit-raita-recipe1.jpg"
+};
+
 /* ---------- state ---------- */
 const LS = "menuPlannerV2";
 let store = JSON.parse(localStorage.getItem(LS) || "null");
 function uid(){ return "i"+Math.random().toString(36).slice(2,9); }
 if(!store){
   store = {library:{}, plan:{}, stock:{}, grocery:{}};
-  CATS.forEach(c=> store.library[c] = SEED[c].map(d=>({id:uid(), n:d.n, cat:c, with:d.with||null, note:d.note||"", ing:d.ing||[], img:null})) );
+  CATS.forEach(c=> store.library[c] = SEED[c].map(d=>({id:uid(), n:d.n, cat:c, with:d.with||null, note:d.note||"", ing:d.ing||[], img:PHOTO[d.n]||null})) );
   localStorage.setItem(LS, JSON.stringify(store));
+} else {
+  // backfill photos for items that don't have one yet
+  let changed=false;
+  CATS.forEach(c=> (store.library[c]||[]).forEach(it=>{ if(!it.img && PHOTO[it.n]){ it.img=PHOTO[it.n]; changed=true; } }));
+  if(changed) localStorage.setItem(LS, JSON.stringify(store));
 }
 function save(){ try{ localStorage.setItem(LS, JSON.stringify(store)); }catch(e){ alert("Storage full — try a smaller image."); } }
 function allItems(){ return CATS.flatMap(c=>store.library[c]); }
