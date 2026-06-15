@@ -102,23 +102,38 @@ body.dark .tag.roti{background:#43321f; color:#e8a96a;} body.dark .tag.rice{back
 .hint{font-size:12px; color:var(--muted); margin:0 0 14px;}
 select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 7px; font-size:12.5px; background:var(--card); color:var(--ink); font-family:inherit;}
 .planwrap{overflow-x:auto; padding-bottom:6px;}
-.plangrid{display:grid; grid-template-columns:76px repeat(7, minmax(100px,1fr)); gap:7px; min-width:760px; max-width:1060px; align-items:stretch;}
-.phead{font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); text-align:center; padding:7px 4px; background:var(--card); border:1px solid var(--line); border-radius:9px;}
-.pmeal{display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; color:var(--ink);}
-.pmeal .mdot{width:8px; height:8px; border-radius:3px; flex-shrink:0;}
-.pcell{height:70px; display:flex;}
-.padd{flex:1; border:1.5px dashed var(--line); background:transparent; border-radius:11px; color:var(--muted); font-size:22px; cursor:pointer; transition:border-color .15s,color .15s,background .15s;}
+.planboard{display:flex; gap:12px; align-items:flex-start; min-width:max-content;}
+.pday{flex:1; min-width:150px; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.05), 0 8px 20px rgba(0,0,0,.05);}
+body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32);}
+.pday.today{border-color:var(--accent); box-shadow:0 0 0 1.5px var(--accent), 0 8px 20px rgba(0,0,0,.10);}
+.pday-head{padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:1px; border-bottom:1px solid var(--line);}
+.pday-head .pd-day{font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--muted);}
+.pday-head .pd-num{font-size:17px; font-weight:750; color:var(--ink); line-height:1;}
+.pday.today .pday-head{background:var(--accent-soft);}
+.pday.today .pday-head .pd-day,.pday.today .pday-head .pd-num{color:var(--accent);}
+.pgroup{padding:18px 10px; display:flex; flex-direction:column; gap:7px;}
+.pgroup + .pgroup{border-top:1px solid var(--line);}
+.pglabel{display:flex; align-items:center; gap:6px; font-size:9.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--muted);}
+.pglabel .mdot{width:8px; height:8px; border-radius:2px; flex-shrink:0;}
+.pgroup .pcard,.pgroup .padd,.pstack .pcard,.pstack .padd{flex:0 0 auto; width:100%;}
+.pfull,.pmain{height:96px;}
+.padd{position:relative; display:flex; align-items:center; justify-content:center; border:1.5px dashed var(--line); background:transparent; border-radius:11px; color:var(--muted); font-size:20px; cursor:pointer; transition:border-color .15s,color .15s,background .15s; overflow:hidden;}
 .padd:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft);}
-.pcard{position:relative; flex:1; border-radius:11px; overflow:hidden; cursor:pointer; background:var(--chip); transition:box-shadow .15s, transform .15s;}
-.pcard:hover{box-shadow:0 5px 16px rgba(0,0,0,.18); transform:translateY(-1px);}
+.pcard{position:relative; border-radius:11px; overflow:hidden; cursor:pointer; background:var(--chip); box-shadow:inset 0 0 0 1px rgba(255,255,255,.05); transition:box-shadow .15s, transform .15s;}
+.pcard:hover{box-shadow:0 6px 16px rgba(0,0,0,.22); transform:translateY(-2px);}
 .pcard .pbg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
 .pcard .pemoji{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; color:var(--ink); opacity:.85;}
 .pcard .pshade{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.32) 44%, rgba(0,0,0,0) 76%);}
-.pcard .pname{position:absolute; left:7px; right:7px; bottom:6px; color:#fff; font-size:11px; font-weight:650; line-height:1.15; text-shadow:0 1px 3px rgba(0,0,0,.75); z-index:2;}
+.pcard .pname{position:absolute; left:9px; right:9px; bottom:8px; color:#fff; font-size:12.5px; font-weight:650; line-height:1.2; text-shadow:0 1px 3px rgba(0,0,0,.75); z-index:2;}
 .pcard .pwith{position:absolute; top:5px; left:5px; z-index:3; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:9px; font-weight:700; text-transform:capitalize; padding:2px 7px; border-radius:999px; cursor:pointer;}
 .pcard .pwith:hover{background:var(--accent);}
 .pclear{position:absolute; top:6px; right:6px; width:19px; height:19px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:10px; line-height:1; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:3;}
 .pcard:hover .pclear{display:flex;}
+/* lunch = main + paired side */
+.pstack{display:flex; flex-direction:column; gap:8px;}
+.pside{height:92px;}
+.pside .pname{font-size:11px; bottom:7px; left:8px; right:8px;}
+.padd.pside{font-size:11px; font-weight:600; color:var(--muted); border-radius:11px;}
 /* picker modal */
 .picker-modal{max-width:580px;}
 .picker-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
@@ -161,8 +176,16 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
 .modal-actions .spacer{flex:1;}
 @media(max-width:760px){
   .app{flex-direction:column;}
-  .nav{width:100%; flex-direction:row; overflow-x:auto; padding:10px;} .nav .brand{display:none;} .nav .theme{margin-top:0;}
+  .nav{position:fixed; bottom:0; left:0; right:0; width:auto; flex-direction:row; justify-content:space-around; align-items:stretch; gap:2px; padding:6px 6px calc(6px + env(safe-area-inset-bottom)); border-right:none; border-top:1px solid var(--line); z-index:50; box-shadow:0 -2px 12px rgba(0,0,0,.12);}
+  .nav .brand{display:none;}
+  .nav button{flex:1; flex-direction:column; gap:3px; font-size:9.5px; padding:7px 2px; text-align:center; justify-content:center; border-radius:10px;}
+  .nav .ico{font-size:19px;}
+  .nav button.active{background:transparent; color:var(--accent);}
+  .nav .theme{margin-top:0;}
+  .main{padding:18px 14px 92px;}
   .libwrap{flex-direction:column;} .catcol{width:100%; position:static; display:flex; flex-wrap:wrap; align-items:center;} .catcol .cap{width:100%;} .catcol button{width:auto;}
+  .pday{min-width:158px;}
+  .viewhead h2{font-size:19px;}
 }
 </style>
 </head>
@@ -172,7 +195,6 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
     <div class="brand">🍽️ Menu Planner</div>
     <button data-view="library" class="active"><span class="ico">📚</span> Food Library</button>
     <button data-view="planner"><span class="ico">📅</span> Weekly Planner</button>
-    <button data-view="grocery"><span class="ico">🛒</span> Grocery List</button>
     <button class="theme" id="themeBtn"><span class="ico">🌙</span> Dark mode</button>
   </nav>
 
@@ -201,17 +223,9 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
         <div><h2>Weekly Planner</h2><p class="sub">Pick dishes for each meal — saved automatically.</p></div>
         <div class="toolbar"><button class="btn primary" id="autofill">✨ Auto-fill week</button><button class="btn ghost" id="clearweek">Clear</button></div>
       </div>
-      <div class="planwrap"><div class="plangrid" id="plangrid"></div></div>
+      <div class="planwrap"><div class="planboard" id="plangrid"></div></div>
     </section>
 
-    <!-- GROCERY -->
-    <section class="view" id="grocery">
-      <div class="viewhead">
-        <div><h2>Grocery List</h2><p class="sub">Built from your weekly plan. Tick what you already have.</p></div>
-        <div class="toolbar"><button class="btn primary" id="genlist">🛒 Build from this week</button><button class="btn ghost" id="resetstock">Reset ticks</button></div>
-      </div>
-      <div id="glist"></div>
-    </section>
   </main>
 </div>
 
@@ -319,14 +333,18 @@ const SEED = {
     {n:"Paneer chili", ing:["paneer","capsicum","onion","soy sauce"]},
     {n:"Tawa pullao", ing:["rice","mixed vegetables","pav bhaji masala","butter"]},
     {n:"Pizza", ing:["pizza base","cheese","capsicum","onion","pizza sauce"]},
-    {n:"Egg fried rice", ing:["rice","eggs","capsicum","carrot","spring onion"]}
+    {n:"Egg fried rice", ing:["rice","eggs","capsicum","carrot","spring onion"]},
+    {n:"Ramen", ing:["ramen noodles","vegetables","soy sauce","spring onion","sesame oil"]},
+    {n:"Veg grilled sandwich", ing:["bread","cucumber","tomato","onion","capsicum","butter","green chutney"]}
   ],
   sides: [
     {n:"Channa jor chaat", ing:["channa jor","onion","tomato","lemon"]},
     {n:"Sprouts chaat", ing:["sprouts","onion","tomato","lemon"]},
     {n:"Fruits in curd", ing:["curd","banana","apple","pomegranate"]},
     {n:"Cut cucumber & tomato", ing:["cucumber","tomato","salt","lemon"]},
-    {n:"Boondi raita", ing:["curd","boondi","cumin","salt"]}
+    {n:"Boondi raita", ing:["curd","boondi","cumin","salt"]},
+    {n:"Greek yogurt", ing:["greek yogurt"]},
+    {n:"Cut fruits", ing:["apple","banana","papaya","pomegranate"]}
   ]
 };
 const CATMETA = {
@@ -337,12 +355,14 @@ const CATMETA = {
 };
 const CATS = ["breakfast","sabji","nonRoutine","sides"];
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const SLOTS = [
-  {key:"breakfast", label:"Breakfast", from:["breakfast"]},
-  {key:"lunch", label:"Lunch", from:["sabji","nonRoutine"]},
-  {key:"dinner", label:"Dinner", from:["nonRoutine","sabji"]},
-  {key:"side", label:"Side / Snack", from:["sides"]}
+// Planner rows. Lunch pairs a main (sabji) with a side/salad. Dinner has no side.
+const ROWS = [
+  {key:"breakfast", label:"Breakfast", color:"breakfast"},
+  {key:"lunch", label:"Lunch", color:"sabji", side:true},
+  {key:"dinner", label:"Dinner", color:"nonRoutine"}
 ];
+const PICK_FROM = { breakfast:["breakfast"], lunch:["sabji"], lunchSide:["sides"], dinner:["nonRoutine","sabji"] };
+function slotLabel(k){ return k==="lunchSide"?"Side / Salad" : k==="lunch"?"Lunch" : k==="dinner"?"Dinner" : "Breakfast"; }
 
 /* ---------- photo map (files committed in /photos) ---------- */
 const PHOTO = {
@@ -351,7 +371,11 @@ const PHOTO = {
   "Aloo / veg sandwich":"photos/sandwich.jpg",
   "Idli":"photos/idli.webp",
   "Uttapam":"photos/uttapam-recipe-swasthi.jpg",
-  "Sevaiya (vermicelli)":"photos/maxresdefault.jpg",
+  "Sevaiya (vermicelli)":"photos/sevaiyan.jpg",
+  "Veg grilled sandwich":"photos/veg-grilled-sandwich-recipe.jpg",
+  "Ramen":"photos/ramen.webp",
+  "Greek yogurt":"photos/greek%20yogurt.webp",
+  "Cut fruits":"photos/cut%20fruits.jpg",
   "Besan cheela":"photos/besan%20chelia.jpeg",
   "Banana milkshake":"photos/banana-milkshake-one.jpg",
   "Aloo / paneer paratha":"photos/aloo%20paratha.jpg",
@@ -402,11 +426,20 @@ if(!store){
   CATS.forEach(c=> store.library[c] = SEED[c].map(d=>({id:uid(), n:d.n, cat:c, with:d.with||null, note:d.note||"", ing:d.ing||[], img:PHOTO[d.n]||null})) );
   localStorage.setItem(LS, JSON.stringify(store));
 } else {
-  // backfill photos for items that don't have one yet
   let changed=false;
-  CATS.forEach(c=> (store.library[c]||[]).forEach(it=>{ if(!it.img && PHOTO[it.n]){ it.img=PHOTO[it.n]; changed=true; } }));
+  // sync managed photos (fill missing, and refresh photos/* paths if the map changed) — leaves user-uploaded data: images alone
+  CATS.forEach(c=> (store.library[c]||[]).forEach(it=>{
+    if(PHOTO[it.n] && it.img!==PHOTO[it.n] && (!it.img || (typeof it.img==="string" && it.img.indexOf("photos/")===0))){ it.img=PHOTO[it.n]; changed=true; }
+  }));
+  // add new dishes shipped in the built-in list (match by name)
+  CATS.forEach(c=> (SEED[c]||[]).forEach(d=>{
+    if(!(store.library[c]||[]).some(it=>it.n===d.n)){
+      store.library[c].push({id:uid(), n:d.n, cat:c, with:d.with||null, note:d.note||"", ing:d.ing||[], img:PHOTO[d.n]||null, rate:null});
+      changed=true;
+    }
+  }));
   // prune dishes removed from non-routine
-  ["Aloo paratha","Keema pau (soya)"].forEach(nm=>{
+  ["Aloo paratha","Keema pau (soya)","Vegetable sandwich"].forEach(nm=>{
     const before=(store.library.nonRoutine||[]).length;
     store.library.nonRoutine=(store.library.nonRoutine||[]).filter(it=>it.n!==nm);
     if(store.library.nonRoutine.length!==before) changed=true;
@@ -455,7 +488,8 @@ const RATINGS = {
   "Poori + aloo sabji":{h:1,p:2}, "Paneer chili":{h:3,p:4}, "Tawa pullao":{h:3,p:2},
   "Pizza":{h:2,p:3}, "Egg fried rice":{h:3,p:3},
   "Channa jor chaat":{h:4,p:4}, "Sprouts chaat":{h:5,p:3}, "Fruits in curd":{h:5,p:3},
-  "Cut cucumber & tomato":{h:5,p:1}, "Boondi raita":{h:3,p:2}
+  "Cut cucumber & tomato":{h:5,p:1}, "Boondi raita":{h:3,p:2},
+  "Ramen":{h:2,p:2}, "Veg grilled sandwich":{h:3,p:2}, "Greek yogurt":{h:5,p:4}, "Cut fruits":{h:5,p:1}
 };
 function nutrition(it){
   if(typeof it.health==="number" && typeof it.protein==="number") return {health:it.health, protein:it.protein};
@@ -603,31 +637,32 @@ document.getElementById("additem").addEventListener("click", ()=> openForm(null,
 
 /* ---------- planner (calendar grid) ---------- */
 const DSHORT = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+function weekDates(){
+  const now=new Date(); const off=(now.getDay()+6)%7; // 0=Mon
+  const mon=new Date(now); mon.setHours(0,0,0,0); mon.setDate(now.getDate()-off);
+  return DAYS.map((_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+}
 function renderPlanner(){
   const el = document.getElementById("plangrid");
-  let html = `<div class="pcorner"></div>`;
-  DAYS.forEach((day,di)=> html += `<div class="phead">${DSHORT[di]}<span>${day.slice(0,3)==DSHORT[di]?'':''}</span></div>`);
-  SLOTS.forEach(slot=>{
-    html += `<div class="pmeal"><span class="mdot" style="background:${(CATMETA[slot.from[0]]||{}).color||'var(--accent)'}"></span>${slot.label}</div>`;
-    DAYS.forEach((day,di)=>{
-      const cell = di+"_"+slot.key;
-      let cur = store.plan[cell] || {};
-      if(cur.name && !cur.id){ const it=findByName(cur.name); if(it) cur.id=it.id; }
-      const it = cur.id ? getItem(cur.id) : null;
-      if(it){
-        const bg = it.img ? `<img class="pbg" src="${it.img}" alt=""><div class="pshade"></div>` : `<span class="pemoji">${CATMETA[it.cat].emoji}</span><div class="pshade"></div>`;
-        let withPill = "";
-        if(it.with && it.with.length){
-          withPill = `<button class="pwith" data-cell="${cell}" title="Toggle roti / rice">${withLabel(cur.with||it.with[0])}</button>`;
-        }
-        html += `<div class="pcell"><div class="pcard" data-cell="${cell}" data-di="${di}" data-slot="${slot.key}">
-          ${bg}<button class="pclear" data-clear="${cell}" title="Remove">✕</button>${withPill}
-          <div class="pname">${it.n}</div>
-        </div></div>`;
-      } else {
-        html += `<div class="pcell"><button class="padd" data-di="${di}" data-slot="${slot.key}">+</button></div>`;
-      }
-    });
+  const wd = weekDates(), todayStr = new Date().toDateString();
+  let html = "";
+  DAYS.forEach((day,di)=>{
+    const d=wd[di], today=d.toDateString()===todayStr;
+    html += `<div class="pday${today?' today':''}">
+      <div class="pday-head"><span class="pd-day">${DSHORT[di]}</span><span class="pd-num">${d.getDate()}</span></div>
+      <div class="pgroup">
+        <div class="pglabel"><span class="mdot" style="background:${CATMETA.breakfast.color}"></span>Breakfast</div>
+        ${cellHtml(di,"breakfast","pfull")}
+      </div>
+      <div class="pgroup">
+        <div class="pglabel"><span class="mdot" style="background:${CATMETA.sabji.color}"></span>Lunch</div>
+        <div class="pstack">${cellHtml(di,"lunch","pmain")}${cellHtml(di,"lunchSide","pside","＋ Side / salad")}</div>
+      </div>
+      <div class="pgroup">
+        <div class="pglabel"><span class="mdot" style="background:${CATMETA.nonRoutine.color}"></span>Dinner</div>
+        ${cellHtml(di,"dinner","pfull")}
+      </div>
+    </div>`;
   });
   el.innerHTML = html;
   el.querySelectorAll(".pcard").forEach(c=> c.addEventListener("click", e=>{
@@ -646,23 +681,34 @@ function renderPlanner(){
   }));
 }
 function withLabel(w){ return w==="both" ? "roti + rice" : w; }
+function cellHtml(di, slotKey, klass, ph){
+  const cell = di+"_"+slotKey;
+  let cur = store.plan[cell] || {};
+  if(cur.name && !cur.id){ const it=findByName(cur.name); if(it) cur.id=it.id; }
+  const it = cur.id ? getItem(cur.id) : null;
+  if(it){
+    const bg = it.img ? `<img class="pbg" src="${it.img}" alt=""><div class="pshade"></div>` : `<span class="pemoji">${CATMETA[it.cat].emoji}</span><div class="pshade"></div>`;
+    let withPill = "";
+    if(it.with && it.with.length) withPill = `<button class="pwith" data-cell="${cell}" title="Toggle roti / rice">${withLabel(cur.with||it.with[0])}</button>`;
+    return `<div class="pcard ${klass||''}" data-cell="${cell}" data-di="${di}" data-slot="${slotKey}">${bg}<button class="pclear" data-clear="${cell}" title="Remove">✕</button>${withPill}<div class="pname">${it.n}</div></div>`;
+  }
+  return `<button class="padd ${klass||''}" data-di="${di}" data-slot="${slotKey}">${ph||"+"}</button>`;
+}
 /* picker */
 let pickerCtx = null;
 const pickerOverlay = document.getElementById("pickerOverlay");
-function slotByKey(k){ return SLOTS.find(s=>s.key===k); }
 function openPicker(di, slotKey){
   pickerCtx = {di, slotKey};
-  const slot = slotByKey(slotKey);
-  document.getElementById("pickerTitle").textContent = `${DAYS[di]} · ${slot.label}`;
+  document.getElementById("pickerTitle").textContent = `${DAYS[di]} · ${slotLabel(slotKey)}`;
   document.getElementById("pickerSearch").value = "";
   buildPicker("");
   pickerOverlay.classList.add("show");
 }
 function buildPicker(term){
-  const slot = slotByKey(pickerCtx.slotKey);
+  const cats = PICK_FROM[pickerCtx.slotKey] || [];
   const grid = document.getElementById("pickerGrid");
   let html = "";
-  slot.from.forEach(cat=>{
+  cats.forEach(cat=>{
     let items = store.library[cat];
     if(term) items = items.filter(it=>it.n.toLowerCase().includes(term));
     if(!items.length) return;
@@ -675,9 +721,12 @@ function buildPicker(term){
   grid.innerHTML = html || `<div class="muted" style="padding:12px">No dishes found.</div>`;
   grid.querySelectorAll(".pickitem").forEach(b=> b.addEventListener("click", ()=>{
     const it = getItem(b.dataset.id);
-    const cell = pickerCtx.di+"_"+pickerCtx.slotKey;
+    const di = pickerCtx.di, sk = pickerCtx.slotKey;
+    // Rule: lunch and dinner can't be the same dish
+    if(sk==="dinner" && (store.plan[di+"_lunch"]||{}).id===it.id){ alert("Lunch and dinner can't be the same dish."); return; }
+    if(sk==="lunch" && (store.plan[di+"_dinner"]||{}).id===it.id){ alert("Lunch and dinner can't be the same dish."); return; }
     const e = {id:it.id}; if(it.with && it.with.length) e.with = it.with[0];
-    store.plan[cell] = e; save(); pickerOverlay.classList.remove("show"); renderPlanner();
+    store.plan[di+"_"+sk] = e; save(); pickerOverlay.classList.remove("show"); renderPlanner();
   }));
 }
 document.getElementById("pickerSearch").addEventListener("input", e=> buildPicker(e.target.value.trim().toLowerCase()));
@@ -690,56 +739,30 @@ document.getElementById("pickerClear").addEventListener("click", ()=>{
 });
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 document.getElementById("autofill").addEventListener("click", ()=>{
-  const used={breakfast:[],lunch:[],dinner:[],side:[]};
-  DAYS.forEach((day,di)=> SLOTS.forEach(slot=>{
-    const cell=di+"_"+slot.key; let pool=[]; slot.from.forEach(c=> pool.push(...store.library[c]));
-    if(!pool.length){ store.plan[cell]={}; return; }
-    let avail=pool.filter(it=>!used[slot.key].slice(-3).includes(it.id)); if(!avail.length) avail=pool;
-    const it=pick(avail); used[slot.key].push(it.id);
-    const e={id:it.id}; if(it.with&&it.with.length) e.with=it.with[0]; store.plan[cell]=e;
-  }));
+  const recent={breakfast:[],lunch:[],lunchSide:[],dinner:[]};
+  function pickAvoid(pool, key){
+    if(!pool || !pool.length) return null;
+    let avail=pool.filter(it=>!recent[key].slice(-3).includes(it.id)); if(!avail.length) avail=pool;
+    const it=pick(avail); recent[key].push(it.id); return it;
+  }
+  function setPlan(di,slot,it){ const cell=di+"_"+slot; if(!it){ store.plan[cell]={}; return it; } const e={id:it.id}; if(it.with&&it.with.length) e.with=it.with[0]; store.plan[cell]=e; return it; }
+  DAYS.forEach((day,di)=>{
+    setPlan(di,"breakfast", pickAvoid(store.library.breakfast,"breakfast"));
+    const lunch = setPlan(di,"lunch", pickAvoid(store.library.sabji,"lunch"));      // rule 3: lunch = sabji
+    setPlan(di,"lunchSide", pickAvoid(store.library.sides,"lunchSide"));            // rule 4: lunch paired with side
+    // rule 5: dinner mostly non-routine, sometimes sabji. rule 1: not same as lunch
+    let pool = (Math.random()<0.75 ? store.library.nonRoutine : store.library.sabji);
+    if(!pool || !pool.length) pool = (store.library.nonRoutine||[]).concat(store.library.sabji||[]);
+    let dinner=null, tries=0;
+    do { dinner = pickAvoid(pool,"dinner"); tries++; } while(dinner && lunch && dinner.id===lunch.id && tries<10);
+    setPlan(di,"dinner", dinner);
+  });
   save(); renderPlanner();
 });
 document.getElementById("clearweek").addEventListener("click", ()=>{ if(confirm("Clear the whole week?")){ store.plan={}; save(); renderPlanner(); } });
 
-/* ---------- grocery ---------- */
-function categorize(ing){
-  const veg=["potato","onion","tomato","cauliflower","peas","spinach","okra","cabbage","carrot","beans","capsicum","brinjal","cucumber","spring onion","green chili","curry leaves","mint","lemon","banana","apple","pomegranate","mixed vegetables","coconut chutney","green chutney","sprouts"];
-  const dairy=["eggs","paneer","milk","butter","ghee","curd","cream","cheese","soya granules"];
-  const i=ing.toLowerCase();
-  if(dairy.some(k=>i.includes(k))) return "Dairy & Protein";
-  if(veg.some(k=>i.includes(k))) return "Vegetables & Fruit";
-  return "Grains, Pantry & Spices";
-}
-document.getElementById("genlist").addEventListener("click", ()=>{
-  const counts={};
-  Object.values(store.plan).forEach(v=>{
-    if(!v||!v.id) return; const it=getItem(v.id); if(!it) return;
-    it.ing.forEach(ing=> counts[ing]=(counts[ing]||0)+1);
-    if(v.with==="roti"||v.with==="both") counts["wheat flour (roti)"]=(counts["wheat flour (roti)"]||0)+1;
-    if(v.with==="rice"||v.with==="both") counts["rice"]=(counts["rice"]||0)+1;
-  });
-  store.grocery=counts; save(); renderGrocery();
-});
-document.getElementById("resetstock").addEventListener("click", ()=>{ store.stock={}; save(); renderGrocery(); });
-function renderGrocery(){
-  const el=document.getElementById("glist"); const counts=store.grocery;
-  if(!counts||!Object.keys(counts).length){ el.innerHTML=`<div class="empty">Plan some meals, then tap “Build from this week”.</div>`; return; }
-  const groups={"Vegetables & Fruit":[],"Dairy & Protein":[],"Grains, Pantry & Spices":[]};
-  Object.entries(counts).forEach(([ing,c])=> groups[categorize(ing)].push([ing,c]));
-  let html="";
-  Object.keys(groups).forEach(g=>{
-    const items=groups[g].sort((a,b)=>a[0].localeCompare(b[0])); if(!items.length) return;
-    html+=`<div class="gcat"><h4>${g}</h4>`;
-    items.forEach(([ing,c])=>{ const have=store.stock[ing]?"have":""; html+=`<div class="gitem ${have}"><input type="checkbox" data-ing="${ing}" ${store.stock[ing]?"checked":""}><span class="nm">${ing}</span><span class="cnt">×${c}</span></div>`; });
-    html+=`</div>`;
-  });
-  el.innerHTML=html;
-  el.querySelectorAll("input[type=checkbox]").forEach(cb=> cb.addEventListener("change", ()=>{ store.stock[cb.dataset.ing]=cb.checked; save(); renderGrocery(); }));
-}
-
 /* ---------- init ---------- */
-renderCatCol(); renderRows(); renderPlanner(); renderGrocery();
+renderCatCol(); renderRows(); renderPlanner();
 </script>
 </body>
 </html>
