@@ -141,6 +141,13 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
 .pside{height:92px;}
 .pside .pname{font-size:11px; bottom:7px; left:8px; right:8px;}
 .padd.pside{font-size:11px; font-weight:600; color:var(--muted); border-radius:11px;}
+/* today (1-day) view */
+#todayboard{max-width:520px;}
+.tsection{margin-bottom:16px;}
+.tslabel{display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:8px;}
+.tslabel .mdot{width:10px; height:10px; border-radius:3px; flex-shrink:0;}
+.tstack{display:flex; flex-direction:column; gap:9px;}
+.tfull{height:132px;} .tside{height:96px;}
 /* picker modal */
 .picker-modal{max-width:580px;}
 .picker-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
@@ -201,6 +208,8 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
   .pfull,.pmain{height:62px;}
   .pside{height:54px;}
   .pcard .pname{font-size:10.5px; bottom:5px;}
+  #todayboard{max-width:none;}
+  .tfull{height:120px;} .tside{height:84px;}
 }
 </style>
 </head>
@@ -209,6 +218,7 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
   <nav class="nav">
     <div class="brand">🍽️ Menu Planner</div>
     <button data-view="library" class="active"><span class="ico">📚</span> Food Library</button>
+    <button data-view="today"><span class="ico">📌</span> Today</button>
     <button data-view="planner"><span class="ico">📅</span> Weekly Planner</button>
     <button class="theme" id="themeBtn"><span class="ico">🌙</span> Dark mode</button>
   </nav>
@@ -230,6 +240,19 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
           <div class="blocks" id="blocks"></div>
         </div>
       </div>
+    </section>
+
+    <!-- TODAY -->
+    <section class="view" id="today">
+      <div class="viewhead">
+        <div><h2 id="todayTitle">Today</h2><p class="sub">Plan just today's meals.</p></div>
+        <div class="toolbar">
+          <button class="btn primary" id="todayfill">✨ Auto-fill today</button>
+          <label class="switch" title="Prefer dishes with high Health + Protein ratings"><input type="checkbox" id="healthyToggleToday"><span class="track"></span> 💪 Healthy</label>
+          <button class="btn ghost" id="todayclear">Clear</button>
+        </div>
+      </div>
+      <div id="todayboard"></div>
     </section>
 
     <!-- PLANNER -->
@@ -317,7 +340,8 @@ const SEED = {
     {n:"Sevaiya (vermicelli)", ing:["vermicelli","onion","green peas","carrot","mustard seeds"]},
     {n:"Besan cheela", ing:["besan","onion","tomato","green chili"]},
     {n:"Banana milkshake", ing:["banana","milk","sugar"]},
-    {n:"Paneer / Aloo paratha", ing:["wheat flour","potato","paneer","onion","butter"]}
+    {n:"Paneer / Aloo paratha", ing:["wheat flour","potato","paneer","onion","butter"]},
+    {n:"Tomato beans and bread", ing:["bread","baked beans","tomato","onion","butter"]}
   ],
   sabji: [
     {n:"Aloo gobi", with:["roti","rice"], note:"rice only if gravy", ing:["potato","cauliflower","onion","tomato","spices"]},
@@ -338,7 +362,8 @@ const SEED = {
     {n:"Black channe", with:["roti"], ing:["black chickpeas","onion","spices"]},
     {n:"Daal", with:["rice","roti"], note:"roti if a sabji is also made", ing:["toor dal","tomato","ghee"]},
     {n:"Daal makhani", with:["rice"], ing:["black urad dal","kidney beans","butter","cream"]},
-    {n:"Kadhi", with:["rice"], ing:["besan","curd","onion"]}
+    {n:"Kadhi", with:["rice"], ing:["besan","curd","onion"]},
+    {n:"Egg curry", with:["roti","rice"], ing:["eggs","onion","tomato","spices"]}
   ],
   nonRoutine: [
     {n:"Pav bhaji", ing:["pav","potato","green peas","cauliflower","capsicum","tomato","butter","pav bhaji masala"]},
@@ -354,7 +379,8 @@ const SEED = {
     {n:"Pizza", ing:["pizza base","cheese","capsicum","onion","pizza sauce"]},
     {n:"Egg fried rice", ing:["rice","eggs","capsicum","carrot","spring onion"]},
     {n:"Ramen", ing:["ramen noodles","vegetables","soy sauce","spring onion","sesame oil"]},
-    {n:"Veg grilled sandwich", ing:["bread","cucumber","tomato","onion","capsicum","butter","green chutney"]}
+    {n:"Veg grilled sandwich", ing:["bread","cucumber","tomato","onion","capsicum","butter","green chutney"]},
+    {n:"Tomato beans and bread", ing:["bread","baked beans","tomato","onion","butter"]}
   ],
   sides: [
     {n:"Channa jor chaat", ing:["channa jor","onion","tomato","lemon"]},
@@ -395,6 +421,8 @@ const PHOTO = {
   "Ramen":"photos/ramen.webp",
   "Greek yogurt":"photos/greek%20yogurt.webp",
   "Cut fruits":"photos/cut%20fruits.jpg",
+  "Egg curry":"photos/egg%20curry.jpg",
+  "Tomato beans and bread":"photos/tomato%20bean%20toast.jpg",
   "Besan cheela":"photos/besan%20chelia.jpeg",
   "Banana milkshake":"photos/banana-milkshake-one.jpg",
   "Paneer / Aloo paratha":"photos/aloo%20paratha.jpg",
@@ -499,7 +527,8 @@ const RATINGS = {
   "Dum aloo":{h:3,p:2}, "Aloo beans":{h:4,p:2}, "Aloo jeera":{h:3,p:1}, "Palak paneer":{h:4,p:4},
   "Paneer butter masala":{h:2,p:4}, "Bhindi ki sabzi":{h:4,p:2}, "Cabbage":{h:5,p:2}, "Chole":{h:4,p:4},
   "Rajma":{h:4,p:4}, "Mix veg":{h:5,p:2}, "Sev tamatar":{h:3,p:2}, "Black channe":{h:5,p:4},
-  "Daal":{h:5,p:4}, "Daal makhani":{h:3,p:4}, "Kadhi":{h:4,p:3},
+  "Daal":{h:5,p:4}, "Daal makhani":{h:3,p:4}, "Kadhi":{h:4,p:3}, "Egg curry":{h:4,p:4},
+  "Tomato beans and bread":{h:3,p:3},
   "Pav bhaji":{h:2,p:2}, "Noodles":{h:2,p:2}, "Pasta":{h:2,p:3}, "Dosa":{h:3,p:3},
   "Baigan ka bharta":{h:4,p:2}, "Pani puri":{h:2,p:2}, "Rava idli + aloo sabji":{h:3,p:2},
   "Poori + aloo sabji":{h:1,p:2}, "Paneer chili":{h:3,p:4}, "Tawa pullao":{h:3,p:2},
@@ -648,7 +677,7 @@ function removeItem(id){
   if(!confirm(`Remove "${it.n}"?`)) return;
   store.library[it.cat]=store.library[it.cat].filter(x=>x.id!==id);
   Object.keys(store.plan).forEach(k=>{ if(store.plan[k]&&store.plan[k].id===id) delete store.plan[k]; });
-  save(); closeForm(); renderCatCol(); renderRows(); renderPlanner();
+  save(); closeForm(); renderCatCol(); renderRows(); refreshPlanners();
 }
 document.getElementById("additem").addEventListener("click", ()=> openForm(null, activeCat));
 
@@ -682,8 +711,11 @@ function renderPlanner(){
     </div>`;
   });
   el.innerHTML = html;
+  bindCells(el);
+}
+function bindCells(el){
   el.querySelectorAll(".pcard").forEach(c=> c.addEventListener("click", e=>{
-    if(e.target.dataset.clear){ store.plan[e.target.dataset.clear]={}; save(); renderPlanner(); return; }
+    if(e.target.dataset.clear){ store.plan[e.target.dataset.clear]={}; save(); refreshPlanners(); return; }
     if(e.target.classList.contains("pwith")) return;
     openPicker(+c.dataset.di, c.dataset.slot);
   }));
@@ -694,8 +726,23 @@ function renderPlanner(){
     const opts = it.with.length>1 ? it.with.concat("both") : it.with.slice();
     const cur = store.plan[cell].with || it.with[0];
     store.plan[cell].with = opts[(opts.indexOf(cur)+1)%opts.length];
-    save(); renderPlanner();
+    save(); refreshPlanners();
   }));
+}
+function refreshPlanners(){ renderPlanner(); renderToday(); }
+function todayIdx(){ return (new Date().getDay()+6)%7; }
+function renderToday(){
+  const el=document.getElementById("todayboard"); if(!el) return;
+  const di=todayIdx(), d=weekDates()[di];
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const tt=document.getElementById("todayTitle"); if(tt) tt.textContent = `${DAYS[di]}, ${MON[d.getMonth()]} ${d.getDate()}`;
+  const sect=(label,color,inner)=>`<div class="tsection"><div class="tslabel"><span class="mdot" style="background:${color}"></span>${label}</div>${inner}</div>`;
+  let html="";
+  html += sect("Breakfast", CATMETA.breakfast.color, cellHtml(di,"breakfast","tfull"));
+  html += sect("Lunch", CATMETA.sabji.color, `<div class="tstack">${cellHtml(di,"lunch","tfull")}${cellHtml(di,"lunchSide","tside","＋ Side / salad")}</div>`);
+  html += sect("Dinner", CATMETA.nonRoutine.color, cellHtml(di,"dinner","tfull"));
+  el.innerHTML = html;
+  bindCells(el);
 }
 function withLabel(w){ return w==="both" ? "roti + rice" : w; }
 function cellHtml(di, slotKey, klass, ph){
@@ -743,7 +790,7 @@ function buildPicker(term){
     if(sk==="dinner" && (store.plan[di+"_lunch"]||{}).id===it.id){ alert("Lunch and dinner can't be the same dish."); return; }
     if(sk==="lunch" && (store.plan[di+"_dinner"]||{}).id===it.id){ alert("Lunch and dinner can't be the same dish."); return; }
     const e = {id:it.id}; if(it.with && it.with.length) e.with = it.with[0];
-    store.plan[di+"_"+sk] = e; save(); pickerOverlay.classList.remove("show"); renderPlanner();
+    store.plan[di+"_"+sk] = e; save(); pickerOverlay.classList.remove("show"); refreshPlanners();
   }));
 }
 document.getElementById("pickerSearch").addEventListener("input", e=> buildPicker(e.target.value.trim().toLowerCase()));
@@ -752,11 +799,11 @@ pickerOverlay.addEventListener("click", e=>{ if(e.target===pickerOverlay) picker
 document.getElementById("pickerClear").addEventListener("click", ()=>{
   if(!pickerCtx) return;
   store.plan[pickerCtx.di+"_"+pickerCtx.slotKey] = {}; save();
-  pickerOverlay.classList.remove("show"); renderPlanner();
+  pickerOverlay.classList.remove("show"); refreshPlanners();
 });
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 function dishScore(it){ const n=nutrition(it); return n.health + n.protein; }   // 2..10
-function fillWeek(healthy){
+function fillDays(days, healthy){
   const recent={breakfast:[],lunch:[],lunchSide:[],dinner:[]};
   function avoidRecent(pool,key){ let a=pool.filter(it=>!recent[key].slice(-3).includes(it.id)); return a.length?a:pool; }
   function pickRandom(pool,key){ if(!pool||!pool.length) return null; const a=avoidRecent(pool,key); const it=pick(a); recent[key].push(it.id); return it; }
@@ -770,7 +817,7 @@ function fillWeek(healthy){
   }
   const choose = healthy ? pickHealthy : pickRandom;
   function setPlan(di,slot,it){ const cell=di+"_"+slot; if(!it){ store.plan[cell]={}; return it; } const e={id:it.id}; if(it.with&&it.with.length) e.with=it.with[0]; store.plan[cell]=e; return it; }
-  DAYS.forEach((day,di)=>{
+  days.forEach(di=>{
     setPlan(di,"breakfast", choose(store.library.breakfast,"breakfast"));
     const lunch = setPlan(di,"lunch", choose(store.library.sabji,"lunch"));         // rule 3: lunch = sabji
     setPlan(di,"lunchSide", choose(store.library.sides,"lunchSide"));               // rule 4: lunch paired with side
@@ -782,16 +829,20 @@ function fillWeek(healthy){
     do { dinner = choose(pool,"dinner"); tries++; } while(dinner && lunch && dinner.id===lunch.id && tries<10);
     setPlan(di,"dinner", dinner);
   });
-  save(); renderPlanner();
+  save(); refreshPlanners();
 }
-const healthyToggle = document.getElementById("healthyToggle");
-healthyToggle.checked = !!store.healthy;
-document.getElementById("autofill").addEventListener("click", ()=> fillWeek(healthyToggle.checked));
-healthyToggle.addEventListener("change", ()=>{ store.healthy = healthyToggle.checked; save(); });
-document.getElementById("clearweek").addEventListener("click", ()=>{ if(confirm("Clear the whole week?")){ store.plan={}; save(); renderPlanner(); } });
+const ALLDAYS = DAYS.map((_,i)=>i);
+const healthyToggles = [document.getElementById("healthyToggle"), document.getElementById("healthyToggleToday")];
+function syncHealthy(){ healthyToggles.forEach(t=>{ if(t) t.checked = !!store.healthy; }); }
+syncHealthy();
+healthyToggles.forEach(t=> t && t.addEventListener("change", ()=>{ store.healthy = t.checked; save(); syncHealthy(); }));
+document.getElementById("autofill").addEventListener("click", ()=> fillDays(ALLDAYS, !!store.healthy));
+document.getElementById("clearweek").addEventListener("click", ()=>{ if(confirm("Clear the whole week?")){ store.plan={}; save(); refreshPlanners(); } });
+document.getElementById("todayfill").addEventListener("click", ()=> fillDays([todayIdx()], !!store.healthy));
+document.getElementById("todayclear").addEventListener("click", ()=>{ const di=todayIdx(); ["breakfast","lunch","lunchSide","dinner"].forEach(s=> delete store.plan[di+"_"+s]); save(); refreshPlanners(); });
 
 /* ---------- init ---------- */
-renderCatCol(); renderRows(); renderPlanner();
+renderCatCol(); renderRows(); renderPlanner(); renderToday();
 </script>
 </body>
 </html>
