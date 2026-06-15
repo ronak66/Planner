@@ -267,10 +267,8 @@ const SEED = {
     {n:"Noodles", ing:["noodles","capsicum","carrot","cabbage","soy sauce"]},
     {n:"Pasta", ing:["pasta","tomato sauce","capsicum","cheese"]},
     {n:"Dosa", ing:["dosa batter","potato","onion"]},
-    {n:"Aloo paratha", ing:["wheat flour","potato","butter","curd"]},
     {n:"Baigan ka bharta", ing:["brinjal","onion","tomato","spices"]},
     {n:"Pani puri", ing:["puri","potato","chickpeas","tamarind","mint"]},
-    {n:"Keema pau (soya)", ing:["pav","soya granules","onion","tomato","peas"]},
     {n:"Rava idli + aloo sabji", ing:["rava","curd","potato","spices"]},
     {n:"Poori + aloo sabji", ing:["wheat flour","potato","spices"]},
     {n:"Paneer chili", ing:["paneer","capsicum","onion","soy sauce"]},
@@ -281,7 +279,9 @@ const SEED = {
   sides: [
     {n:"Channa jor chaat", ing:["channa jor","onion","tomato","lemon"]},
     {n:"Sprouts chaat", ing:["sprouts","onion","tomato","lemon"]},
-    {n:"Fruits in curd", ing:["curd","banana","apple","pomegranate"]}
+    {n:"Fruits in curd", ing:["curd","banana","apple","pomegranate"]},
+    {n:"Cut cucumber & tomato", ing:["cucumber","tomato","salt","lemon"]},
+    {n:"Boondi raita", ing:["curd","boondi","cumin","salt"]}
   ]
 };
 const CATMETA = {
@@ -333,7 +333,6 @@ const PHOTO = {
   "Noodles":"photos/noodles.jpeg",
   "Pasta":"photos/pasta.webp",
   "Dosa":"photos/dosa.jpg",
-  "Aloo paratha":"photos/aloo%20paratha.jpg",
   "Baigan ka bharta":"photos/baingan-bharta-eggplant-bharta-recipe.webp",
   "Pani puri":"photos/pani-puri.jpg",
   "Rava idli + aloo sabji":"photos/rava%20idli.webp",
@@ -344,7 +343,9 @@ const PHOTO = {
   "Egg fried rice":"photos/egg%20fried%20rice.webp",
   "Channa jor chaat":"photos/channa%20jor.jpg",
   "Sprouts chaat":"photos/sprout%20chaat.webp",
-  "Fruits in curd":"photos/fruit-raita-recipe1.jpg"
+  "Fruits in curd":"photos/fruit-raita-recipe1.jpg",
+  "Cut cucumber & tomato":"photos/sliced-cucumber-tomato-curly-plate-600w-645821848.webp",
+  "Boondi raita":"photos/Boondi-Raita-7.jpg"
 };
 
 /* ---------- state ---------- */
@@ -359,6 +360,12 @@ if(!store){
   // backfill photos for items that don't have one yet
   let changed=false;
   CATS.forEach(c=> (store.library[c]||[]).forEach(it=>{ if(!it.img && PHOTO[it.n]){ it.img=PHOTO[it.n]; changed=true; } }));
+  // prune dishes removed from non-routine
+  ["Aloo paratha","Keema pau (soya)"].forEach(nm=>{
+    const before=(store.library.nonRoutine||[]).length;
+    store.library.nonRoutine=(store.library.nonRoutine||[]).filter(it=>it.n!==nm);
+    if(store.library.nonRoutine.length!==before) changed=true;
+  });
   if(changed) localStorage.setItem(LS, JSON.stringify(store));
 }
 function save(){ try{ localStorage.setItem(LS, JSON.stringify(store)); }catch(e){ alert("Storage full — try a smaller image."); } }
