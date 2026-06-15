@@ -317,7 +317,7 @@ const SEED = {
     {n:"Sevaiya (vermicelli)", ing:["vermicelli","onion","green peas","carrot","mustard seeds"]},
     {n:"Besan cheela", ing:["besan","onion","tomato","green chili"]},
     {n:"Banana milkshake", ing:["banana","milk","sugar"]},
-    {n:"Aloo / paneer paratha", ing:["wheat flour","potato","paneer","onion","butter"]}
+    {n:"Paneer / Aloo paratha", ing:["wheat flour","potato","paneer","onion","butter"]}
   ],
   sabji: [
     {n:"Aloo gobi", with:["roti","rice"], note:"rice only if gravy", ing:["potato","cauliflower","onion","tomato","spices"]},
@@ -397,7 +397,7 @@ const PHOTO = {
   "Cut fruits":"photos/cut%20fruits.jpg",
   "Besan cheela":"photos/besan%20chelia.jpeg",
   "Banana milkshake":"photos/banana-milkshake-one.jpg",
-  "Aloo / paneer paratha":"photos/aloo%20paratha.jpg",
+  "Paneer / Aloo paratha":"photos/aloo%20paratha.jpg",
   "Aloo gobi":"photos/Aloo-gobi-2.jpg",
   "Matar sabji":"photos/matar%20sabji.jpg",
   "Aloo matar":"photos/Aloo-matar.jpg",
@@ -458,10 +458,8 @@ if(!store){
     }
   }));
   // prune dishes removed from non-routine
-  ["Aloo paratha","Keema pau (soya)","Vegetable sandwich"].forEach(nm=>{
-    const before=(store.library.nonRoutine||[]).length;
-    store.library.nonRoutine=(store.library.nonRoutine||[]).filter(it=>it.n!==nm);
-    if(store.library.nonRoutine.length!==before) changed=true;
+  ["Aloo paratha","Keema pau (soya)","Vegetable sandwich","Aloo / paneer paratha"].forEach(nm=>{
+    CATS.forEach(c=>{ const before=(store.library[c]||[]).length; store.library[c]=(store.library[c]||[]).filter(it=>it.n!==nm); if(store.library[c].length!==before) changed=true; });
   });
   if(changed) localStorage.setItem(LS, JSON.stringify(store));
 }
@@ -496,7 +494,7 @@ let searchTerm = "";
 const RATINGS = {
   "Boiled egg & bread":{h:3,p:4}, "Poha":{h:4,p:2}, "Aloo / veg sandwich":{h:3,p:2},
   "Idli":{h:5,p:3}, "Uttapam":{h:4,p:3}, "Sevaiya (vermicelli)":{h:3,p:2},
-  "Besan cheela":{h:4,p:4}, "Banana milkshake":{h:3,p:3}, "Aloo / paneer paratha":{h:3,p:3},
+  "Besan cheela":{h:4,p:4}, "Banana milkshake":{h:3,p:3}, "Paneer / Aloo paratha":{h:3,p:3},
   "Aloo gobi":{h:4,p:2}, "Matar sabji":{h:4,p:3}, "Aloo matar":{h:4,p:2}, "Moong sabzi":{h:5,p:4},
   "Dum aloo":{h:3,p:2}, "Aloo beans":{h:4,p:2}, "Aloo jeera":{h:3,p:1}, "Palak paneer":{h:4,p:4},
   "Paneer butter masala":{h:2,p:4}, "Bhindi ki sabzi":{h:4,p:2}, "Cabbage":{h:5,p:2}, "Chole":{h:4,p:4},
