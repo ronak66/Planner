@@ -170,6 +170,20 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
 .today-actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px; max-width:540px;}
 /* center the library content column */
 #library .viewhead{max-width:640px; margin-left:auto; margin-right:auto;}
+/* ratings info modal */
+.ratings-info{flex-shrink:0; font-size:12.5px;}
+.info-modal{max-width:440px;}
+.info-p{font-size:13.5px; color:var(--ink); margin:12px 0 6px;}
+.info-item{display:flex; align-items:flex-start; gap:10px; font-size:13px; margin:9px 0; color:var(--ink); line-height:1.35;}
+.info-item .bar{margin-top:3px;}
+.info-scale{display:flex; flex-direction:column; gap:8px; margin:4px 0 12px;}
+.info-scale > div{display:flex; align-items:center; gap:11px; font-size:13px; color:var(--muted);}
+.info-note{font-size:12px; color:var(--muted); line-height:1.45; border-top:1px solid var(--line); padding-top:11px; margin-top:6px;}
+.info-modal .bar{display:inline-flex; gap:4px; align-items:center; flex-shrink:0;}
+.info-modal .bar i{width:8px; height:8px; border-radius:50%; background:currentColor; opacity:.18; display:block;}
+.info-modal .bar i.on{opacity:1;}
+.info-modal .bar.health{color:#3a9d63;} .info-modal .bar.protein{color:#5b7fc4;}
+body.dark .info-modal .bar.health{color:#5cb37e;} body.dark .info-modal .bar.protein{color:#7396d6;}
 /* picker modal */
 .picker-modal{max-width:580px;}
 .picker-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
@@ -273,6 +287,7 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
     <section class="view active" id="library">
       <div class="viewhead">
         <div><h2>Food Library</h2><p class="sub">Browse by category. Click a card to edit, or hover to rate.</p></div>
+        <button class="btn ghost ratings-info">ⓘ Ratings guide</button>
       </div>
       <div class="libwrap">
         <aside class="catcol" id="catcol"></aside>
@@ -289,7 +304,7 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
 
     <!-- TODAY -->
     <section class="view" id="today">
-      <div class="viewhead today-head"><div><h2 id="todayTitle">Today</h2><p class="sub">Plan just today's meals.</p></div></div>
+      <div class="viewhead today-head"><div><h2 id="todayTitle">Today</h2><p class="sub">Plan just today's meals.</p></div><button class="btn ghost ratings-info">ⓘ Ratings guide</button></div>
       <div id="todayboard"></div>
       <div class="today-actions">
         <button class="btn primary" id="todayfill">✨ Auto-fill today</button>
@@ -366,6 +381,25 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
     <input type="text" class="search" id="pickerSearch" placeholder="Search dishes…" style="width:100%; margin-bottom:12px;">
     <div class="picker-grid" id="pickerGrid"></div>
     <div class="modal-actions"><button class="btn danger" id="pickerClear">Clear this slot</button></div>
+  </div>
+</div>
+
+<!-- RATINGS INFO MODAL -->
+<div class="overlay" id="infoOverlay">
+  <div class="modal info-modal">
+    <div class="picker-head"><h3>How the ratings work</h3><button class="btn ghost" id="infoClose">✕</button></div>
+    <p class="info-p">Every dish shows two quick scores for a typical home serving — more filled dots = more.</p>
+    <div class="info-item"><span class="bar health"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span><b>Healthy</b> — how nutritious &amp; balanced it is (veggies, legumes, fresh vs. fried / refined).</span></div>
+    <div class="info-item"><span class="bar protein"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span><b>Protein</b> — how protein-dense it is, measured as grams of protein per 100g of the dish.</span></div>
+    <p class="info-p">Protein scale (grams per 100g):</p>
+    <div class="info-scale">
+      <div><span class="bar protein"><i class="on"></i><i></i><i></i><i></i><i></i></span><span>1 · very low (&lt;2g) — e.g. cut fruits, cucumber</span></div>
+      <div><span class="bar protein"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span>2 · low (2–4g) — e.g. poha, idli, dosa</span></div>
+      <div><span class="bar protein"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span>3 · moderate (4–7g) — e.g. dal, sandwich, aloo paratha</span></div>
+      <div><span class="bar protein"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span>4 · high (7–11g) — e.g. paneer, eggs, rajma, besan cheela</span></div>
+      <div><span class="bar protein"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span>5 · very high (11g+) — e.g. plain paneer / eggs</span></div>
+    </div>
+    <p class="info-note">Density (per 100g) keeps it fair across portion sizes. Values are estimates and vary with how it's cooked. For a sabji the score is for the dish itself (not the roti or rice). You can override any rating in a dish's edit form.</p>
   </div>
 </div>
 
@@ -562,22 +596,22 @@ let activeCat = "breakfast";
 let searchTerm = "";
 /* Curated, nutrition-grounded ratings {h:healthy 1-5, p:protein 1-5}. */
 const RATINGS = {
-  "Boiled egg & bread":{h:3,p:4}, "Poha":{h:4,p:2}, "Aloo / veg sandwich":{h:3,p:2},
-  "Idli":{h:5,p:3}, "Uttapam":{h:4,p:3}, "Sevaiya (vermicelli)":{h:3,p:2},
-  "Besan cheela":{h:4,p:4}, "Banana milkshake":{h:3,p:3}, "Paneer / Aloo paratha":{h:3,p:3},
+  "Boiled egg & bread":{h:3,p:4}, "Poha":{h:4,p:2}, "Aloo / veg sandwich":{h:3,p:3},
+  "Idli":{h:5,p:2}, "Uttapam":{h:4,p:2}, "Sevaiya (vermicelli)":{h:3,p:2},
+  "Besan cheela":{h:4,p:4}, "Banana milkshake":{h:3,p:2}, "Paneer / Aloo paratha":{h:3,p:3},
   "Aloo gobi":{h:4,p:2}, "Matar sabji":{h:4,p:3}, "Aloo matar":{h:4,p:2}, "Moong sabzi":{h:5,p:4},
-  "Dum aloo":{h:3,p:2}, "Aloo beans":{h:4,p:2}, "Aloo jeera":{h:3,p:1}, "Palak paneer":{h:4,p:4},
+  "Dum aloo":{h:3,p:2}, "Aloo beans":{h:4,p:2}, "Aloo jeera":{h:3,p:2}, "Palak paneer":{h:4,p:4},
   "Paneer butter masala":{h:2,p:4}, "Bhindi ki sabzi":{h:4,p:2}, "Cabbage":{h:5,p:2}, "Chole":{h:4,p:4},
-  "Rajma":{h:4,p:4}, "Mix veg":{h:5,p:2}, "Sev tamatar":{h:3,p:2}, "Black channe":{h:5,p:4},
-  "Daal":{h:5,p:4}, "Daal makhani":{h:3,p:4}, "Kadhi":{h:4,p:3}, "Egg curry":{h:4,p:4},
+  "Rajma":{h:4,p:4}, "Mix veg":{h:5,p:2}, "Sev tamatar":{h:3,p:3}, "Black channe":{h:5,p:4},
+  "Daal":{h:5,p:3}, "Daal makhani":{h:3,p:3}, "Kadhi":{h:4,p:2}, "Egg curry":{h:4,p:4},
   "Tomato beans and bread":{h:3,p:3},
-  "Pav bhaji":{h:2,p:2}, "Noodles":{h:2,p:2}, "Pasta":{h:2,p:3}, "Dosa":{h:3,p:3},
+  "Pav bhaji":{h:2,p:2}, "Noodles":{h:2,p:2}, "Pasta":{h:2,p:3}, "Dosa":{h:3,p:2},
   "Baigan ka bharta":{h:4,p:2}, "Pani puri":{h:2,p:2}, "Rava idli + aloo sabji":{h:3,p:2},
   "Poori + aloo sabji":{h:1,p:2}, "Paneer chili":{h:3,p:4}, "Tawa pullao":{h:3,p:2},
-  "Pizza":{h:2,p:3}, "Egg fried rice":{h:3,p:3},
-  "Channa jor chaat":{h:4,p:4}, "Sprouts chaat":{h:5,p:3}, "Fruits in curd":{h:5,p:3},
+  "Pizza":{h:2,p:4}, "Egg fried rice":{h:3,p:3},
+  "Channa jor chaat":{h:4,p:4}, "Sprouts chaat":{h:5,p:3}, "Fruits in curd":{h:5,p:2},
   "Cut cucumber & tomato":{h:5,p:1}, "Boondi raita":{h:3,p:2},
-  "Ramen":{h:2,p:2}, "Veg grilled sandwich":{h:3,p:2}, "Greek yogurt":{h:5,p:4}, "Cut fruits":{h:5,p:1}
+  "Ramen":{h:2,p:2}, "Veg grilled sandwich":{h:3,p:3}, "Greek yogurt":{h:5,p:4}, "Cut fruits":{h:5,p:1}
 };
 function nutrition(it){
   if(typeof it.health==="number" && typeof it.protein==="number") return {health:it.health, protein:it.protein};
@@ -917,6 +951,12 @@ document.getElementById("autofill").addEventListener("click", ()=> fillDays(ALLD
 document.getElementById("clearweek").addEventListener("click", ()=>{ if(confirm("Clear the whole week?")){ store.plan={}; save(); refreshPlanners(); } });
 document.getElementById("todayfill").addEventListener("click", ()=> fillDays([todayIdx()], !!store.healthy));
 document.getElementById("todayclear").addEventListener("click", ()=>{ const di=todayIdx(); ["breakfast","lunch","lunchSide","dinner"].forEach(s=> delete store.plan[di+"_"+s]); save(); refreshPlanners(); });
+
+/* ---------- ratings info modal ---------- */
+const infoOverlay = document.getElementById("infoOverlay");
+document.querySelectorAll(".ratings-info").forEach(b=> b.addEventListener("click", ()=> infoOverlay.classList.add("show")));
+document.getElementById("infoClose").addEventListener("click", ()=> infoOverlay.classList.remove("show"));
+infoOverlay.addEventListener("click", e=>{ if(e.target===infoOverlay) infoOverlay.classList.remove("show"); });
 
 /* ---------- keep view height in sync with the bottom nav ---------- */
 function setNavH(){ const n=document.querySelector(".nav"); if(n) document.documentElement.style.setProperty("--navh", Math.round(n.getBoundingClientRect().height)+"px"); }
