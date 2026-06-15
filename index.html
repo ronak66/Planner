@@ -148,6 +148,7 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
 .tslabel .mdot{width:10px; height:10px; border-radius:3px; flex-shrink:0;}
 .tstack{display:flex; flex-direction:column; gap:9px;}
 .tfull{height:132px;} .tside{height:96px;}
+.today-actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px; max-width:520px;}
 /* picker modal */
 .picker-modal{max-width:580px;}
 .picker-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
@@ -208,8 +209,28 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
   .pfull,.pmain{height:62px;}
   .pside{height:54px;}
   .pcard .pname{font-size:10.5px; bottom:5px;}
-  #todayboard{max-width:none;}
-  .tfull{height:120px;} .tside{height:84px;}
+  /* library cards: balance the body content vertically */
+  .block .body{justify-content:center;}
+  .block .body .meters{margin-top:8px;}
+  .libbar{flex-direction:column; align-items:stretch;}
+  .libbar h3{margin-right:0;}
+  .libbar .search{width:100%;}
+  .libbar #additem{width:100%;}
+  /* Today: fit the screen height, no vertical scroll, actions pinned at the bottom */
+  #today.active{display:flex; flex-direction:column; height:calc(100dvh - 70px); overflow:hidden;}
+  #today .today-head{margin-bottom:6px;}
+  #today .today-head h2{font-size:18px;} #today .today-head .sub{display:none;}
+  #todayboard{flex:1; display:flex; flex-direction:column; gap:7px; min-height:0; max-width:none;}
+  .tsection{margin:0; min-height:0; display:flex; flex-direction:column;}
+  .ts-b,.ts-d{flex:1;} .ts-l{flex:1.75;}
+  .tslabel{margin-bottom:3px; font-size:9.5px;}
+  .tsection .pcard,.tsection .padd{flex:1; height:auto; min-height:0;}
+  .tstack{flex:1; min-height:0; gap:6px;}
+  .tstack .tside{flex:1; height:auto;}
+  .tstack .tmain{flex:2; height:auto;}
+  .today-actions{margin-top:7px; max-width:none;}
+  .today-actions .btn{flex:1; padding:11px 8px;}
+  .today-actions .switch{flex:1; justify-content:center; padding:9px 6px;}
 }
 </style>
 </head>
@@ -244,15 +265,13 @@ body.dark .pday{box-shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.32
 
     <!-- TODAY -->
     <section class="view" id="today">
-      <div class="viewhead">
-        <div><h2 id="todayTitle">Today</h2><p class="sub">Plan just today's meals.</p></div>
-        <div class="toolbar">
-          <button class="btn primary" id="todayfill">✨ Auto-fill today</button>
-          <label class="switch" title="Prefer dishes with high Health + Protein ratings"><input type="checkbox" id="healthyToggleToday"><span class="track"></span> 💪 Healthy</label>
-          <button class="btn ghost" id="todayclear">Clear</button>
-        </div>
-      </div>
+      <div class="viewhead today-head"><div><h2 id="todayTitle">Today</h2><p class="sub">Plan just today's meals.</p></div></div>
       <div id="todayboard"></div>
+      <div class="today-actions">
+        <button class="btn primary" id="todayfill">✨ Auto-fill today</button>
+        <label class="switch" title="Prefer dishes with high Health + Protein ratings"><input type="checkbox" id="healthyToggleToday"><span class="track"></span> 💪 Healthy</label>
+        <button class="btn ghost" id="todayclear">Clear</button>
+      </div>
     </section>
 
     <!-- PLANNER -->
@@ -736,11 +755,11 @@ function renderToday(){
   const di=todayIdx(), d=weekDates()[di];
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const tt=document.getElementById("todayTitle"); if(tt) tt.textContent = `${DAYS[di]}, ${MON[d.getMonth()]} ${d.getDate()}`;
-  const sect=(label,color,inner)=>`<div class="tsection"><div class="tslabel"><span class="mdot" style="background:${color}"></span>${label}</div>${inner}</div>`;
+  const sect=(cls,label,color,inner)=>`<div class="tsection ${cls}"><div class="tslabel"><span class="mdot" style="background:${color}"></span>${label}</div>${inner}</div>`;
   let html="";
-  html += sect("Breakfast", CATMETA.breakfast.color, cellHtml(di,"breakfast","tfull"));
-  html += sect("Lunch", CATMETA.sabji.color, `<div class="tstack">${cellHtml(di,"lunch","tfull")}${cellHtml(di,"lunchSide","tside","＋ Side / salad")}</div>`);
-  html += sect("Dinner", CATMETA.nonRoutine.color, cellHtml(di,"dinner","tfull"));
+  html += sect("ts-b","Breakfast", CATMETA.breakfast.color, cellHtml(di,"breakfast","tfull"));
+  html += sect("ts-l","Lunch", CATMETA.sabji.color, `<div class="tstack">${cellHtml(di,"lunch","tfull tmain")}${cellHtml(di,"lunchSide","tside","＋ Side / salad")}</div>`);
+  html += sect("ts-d","Dinner", CATMETA.nonRoutine.color, cellHtml(di,"dinner","tfull"));
   el.innerHTML = html;
   bindCells(el);
 }
