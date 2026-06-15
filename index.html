@@ -98,15 +98,39 @@ body.dark .block .del{background:rgba(0,0,0,.5); color:var(--ink);}
 .tag.roti{background:#fdeedd; color:#9a5618;} .tag.rice{background:#e7f0fb; color:#34608f;}
 body.dark .tag.roti{background:#43321f; color:#e8a96a;} body.dark .tag.rice{background:#22344a; color:#8bb6e6;}
 .muted{color:var(--muted); font-size:12.5px;}
-/* ---- planner ---- */
+/* ---- planner calendar ---- */
 .hint{font-size:12px; color:var(--muted); margin:0 0 14px;}
-.day{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px;}
-.day h3{font-size:14px; margin-bottom:10px;}
-.slots{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:9px;}
-.slot{border:1px dashed var(--line); border-radius:10px; padding:9px 10px;}
-.slot label{display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin-bottom:5px;}
 select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 7px; font-size:12.5px; background:var(--card); color:var(--ink); font-family:inherit;}
-.with-row{margin-top:6px;} .with-row select{font-size:11.5px; padding:4px 6px;}
+.planwrap{overflow-x:auto; padding-bottom:6px;}
+.plangrid{display:grid; grid-template-columns:76px repeat(7, minmax(100px,1fr)); gap:7px; min-width:760px; max-width:1060px; align-items:stretch;}
+.phead{font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); text-align:center; padding:7px 4px; background:var(--card); border:1px solid var(--line); border-radius:9px;}
+.pmeal{display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; color:var(--ink);}
+.pmeal .mdot{width:8px; height:8px; border-radius:3px; flex-shrink:0;}
+.pcell{height:70px; display:flex;}
+.padd{flex:1; border:1.5px dashed var(--line); background:transparent; border-radius:11px; color:var(--muted); font-size:22px; cursor:pointer; transition:border-color .15s,color .15s,background .15s;}
+.padd:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft);}
+.pcard{position:relative; flex:1; border-radius:11px; overflow:hidden; cursor:pointer; background:var(--chip); transition:box-shadow .15s, transform .15s;}
+.pcard:hover{box-shadow:0 5px 16px rgba(0,0,0,.18); transform:translateY(-1px);}
+.pcard .pbg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.pcard .pemoji{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; color:var(--ink); opacity:.85;}
+.pcard .pshade{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.32) 44%, rgba(0,0,0,0) 76%);}
+.pcard .pname{position:absolute; left:7px; right:7px; bottom:6px; color:#fff; font-size:11px; font-weight:650; line-height:1.15; text-shadow:0 1px 3px rgba(0,0,0,.75); z-index:2;}
+.pcard .pwith{position:absolute; top:5px; left:5px; z-index:3; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:9px; font-weight:700; text-transform:capitalize; padding:2px 7px; border-radius:999px; cursor:pointer;}
+.pcard .pwith:hover{background:var(--accent);}
+.pclear{position:absolute; top:6px; right:6px; width:19px; height:19px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:10px; line-height:1; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:3;}
+.pcard:hover .pclear{display:flex;}
+/* picker modal */
+.picker-modal{max-width:580px;}
+.picker-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.picker-head h3{margin:0;}
+.picker-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(124px,1fr)); gap:10px; max-height:54vh; overflow:auto; padding:2px;}
+.pickcat{grid-column:1/-1; font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; margin-top:4px;}
+.pickitem{position:relative; height:92px; border-radius:11px; overflow:hidden; cursor:pointer; background:var(--chip); transition:transform .12s, box-shadow .12s;}
+.pickitem:hover{transform:translateY(-2px); box-shadow:0 5px 14px rgba(0,0,0,.16);}
+.pickitem .pbg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.pickitem .pemoji{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; color:var(--ink);}
+.pickitem .pshade{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,.28) 46%, rgba(0,0,0,0) 78%);}
+.pickitem .pname{position:absolute; left:8px; right:8px; bottom:7px; color:#fff; font-size:11.5px; font-weight:650; line-height:1.2; text-shadow:0 1px 3px rgba(0,0,0,.7);}
 /* ---- grocery ---- */
 .gcat{margin-bottom:16px;}
 .gcat h4{font-size:12px; margin-bottom:6px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
@@ -126,6 +150,9 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
 .field textarea{resize:vertical; min-height:54px;}
 .checks{display:flex; gap:14px;} .checks label{display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; color:var(--ink);}
 .checks input{width:16px; height:16px; accent-color:var(--accent);}
+.rate-edit{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.rate-edit span{font-size:13px; font-weight:600; color:var(--ink);}
+.rate-edit select{width:auto; padding:6px 8px;}
 .imgrow{display:flex; gap:12px; align-items:center;}
 .imgprev{width:64px; height:64px; border-radius:10px; background:var(--bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:28px; overflow:hidden; flex-shrink:0;}
 .imgprev img{width:100%; height:100%; object-fit:cover;}
@@ -174,8 +201,7 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
         <div><h2>Weekly Planner</h2><p class="sub">Pick dishes for each meal — saved automatically.</p></div>
         <div class="toolbar"><button class="btn primary" id="autofill">✨ Auto-fill week</button><button class="btn ghost" id="clearweek">Clear</button></div>
       </div>
-      <p class="hint">For a sabji you can also choose roti / rice.</p>
-      <div id="days"></div>
+      <div class="planwrap"><div class="plangrid" id="plangrid"></div></div>
     </section>
 
     <!-- GROCERY -->
@@ -207,6 +233,12 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
     </div>
     <div class="field"><label>Note (optional)</label><input type="text" id="f_note" placeholder="e.g. rice only if gravy"></div>
     <div class="field"><label>Ingredients (comma-separated, for grocery list)</label><textarea id="f_ing" placeholder="potato, onion, tomato, spices"></textarea></div>
+    <div class="field"><label>Ratings (Auto = use built-in estimate)</label>
+      <div class="rate-edit">
+        <span>Healthy</span><select id="f_health"><option value="">Auto</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+        <span>Protein</span><select id="f_protein"><option value="">Auto</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+      </div>
+    </div>
     <div class="field"><label>Image</label>
       <div class="imgrow">
         <div class="imgprev" id="imgPrev">🍽️</div>
@@ -224,6 +256,19 @@ select{width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 
       <button class="btn ghost" id="cancelBtn">Cancel</button>
       <button class="btn primary" id="saveBtn">Save</button>
     </div>
+  </div>
+</div>
+
+<!-- PICKER MODAL -->
+<div class="overlay" id="pickerOverlay">
+  <div class="modal picker-modal">
+    <div class="picker-head">
+      <h3 id="pickerTitle">Choose a dish</h3>
+      <button class="btn ghost" id="pickerClose">✕</button>
+    </div>
+    <input type="text" class="search" id="pickerSearch" placeholder="Search dishes…" style="width:100%; margin-bottom:12px;">
+    <div class="picker-grid" id="pickerGrid"></div>
+    <div class="modal-actions"><button class="btn danger" id="pickerClear">Clear this slot</button></div>
   </div>
 </div>
 
@@ -395,15 +440,35 @@ document.querySelectorAll(".nav button[data-view]").forEach(b=> b.addEventListen
 /* ---------- library ---------- */
 let activeCat = "breakfast";
 let searchTerm = "";
+/* Curated, nutrition-grounded ratings {h:healthy 1-5, p:protein 1-5}. */
+const RATINGS = {
+  "Boiled egg & bread":{h:3,p:4}, "Poha":{h:4,p:2}, "Aloo / veg sandwich":{h:3,p:2},
+  "Idli":{h:5,p:3}, "Uttapam":{h:4,p:3}, "Sevaiya (vermicelli)":{h:3,p:2},
+  "Besan cheela":{h:4,p:4}, "Banana milkshake":{h:3,p:3}, "Aloo / paneer paratha":{h:3,p:3},
+  "Aloo gobi":{h:4,p:2}, "Matar sabji":{h:4,p:3}, "Aloo matar":{h:4,p:2}, "Moong sabzi":{h:5,p:4},
+  "Dum aloo":{h:3,p:2}, "Aloo beans":{h:4,p:2}, "Aloo jeera":{h:3,p:1}, "Palak paneer":{h:4,p:4},
+  "Paneer butter masala":{h:2,p:4}, "Bhindi ki sabzi":{h:4,p:2}, "Cabbage":{h:5,p:2}, "Chole":{h:4,p:4},
+  "Rajma":{h:4,p:4}, "Mix veg":{h:5,p:2}, "Sev tamatar":{h:3,p:2}, "Black channe":{h:5,p:4},
+  "Daal":{h:5,p:4}, "Daal makhani":{h:3,p:4}, "Kadhi":{h:4,p:3},
+  "Pav bhaji":{h:2,p:2}, "Noodles":{h:2,p:2}, "Pasta":{h:2,p:3}, "Dosa":{h:3,p:3},
+  "Baigan ka bharta":{h:4,p:2}, "Pani puri":{h:2,p:2}, "Rava idli + aloo sabji":{h:3,p:2},
+  "Poori + aloo sabji":{h:1,p:2}, "Paneer chili":{h:3,p:4}, "Tawa pullao":{h:3,p:2},
+  "Pizza":{h:2,p:3}, "Egg fried rice":{h:3,p:3},
+  "Channa jor chaat":{h:4,p:4}, "Sprouts chaat":{h:5,p:3}, "Fruits in curd":{h:5,p:3},
+  "Cut cucumber & tomato":{h:5,p:1}, "Boondi raita":{h:3,p:2}
+};
 function nutrition(it){
+  if(typeof it.health==="number" && typeof it.protein==="number") return {health:it.health, protein:it.protein};
+  if(RATINGS[it.n]) return {health:RATINGS[it.n].h, protein:RATINGS[it.n].p};
+  // heuristic fallback for custom dishes
   const ing = (it.ing||[]).map(s=>s.toLowerCase());
   const proHigh=["paneer","egg","soya","urad","chickpea","rajma","kidney bean","tofu"];
   const proMed=["dal","moong","sprout","channa","pea","cheese","milk","curd","peanut","cashew","besan","yogurt"];
   let pro=0;
   ing.forEach(i=>{ if(proHigh.some(k=>i.includes(k))) pro+=3; else if(proMed.some(k=>i.includes(k))) pro+=1.5; });
-  const good=["spinach","palak","cauliflower","cabbage","carrot","bean","okra","bhindi","brinjal","tomato","onion","cucumber","pea","sprout","fruit","apple","banana","pomegranate","lemon","mint","moong","dal","chickpea","rajma","capsicum","curd","vegetable"];
-  const bad=["pizza base","cheese","butter","cream","sugar","sev","puri","poori","pav","noodle","pasta","sauce","mayon","bread"];
-  let h=2.5;
+  const good=["spinach","palak","cauliflower","cabbage","carrot","bean","okra","bhindi","brinjal","tomato","onion","cucumber","pea","sprout","fruit","apple","banana","pomegranate","lemon","mint","moong","dal","chickpea","rajma","capsicum","curd","vegetable","egg"];
+  const bad=["pizza base","cheese","butter","cream","sugar","sev","puri","poori","pav","noodle","pasta","sauce","mayon","deep fried"];
+  let h=2.7;
   ing.forEach(i=>{ if(good.some(k=>i.includes(k))) h+=0.45; if(bad.some(k=>i.includes(k))) h-=0.8; });
   const clamp=x=>Math.max(1,Math.min(5,Math.round(x)));
   return {protein:clamp(1+pro), health:clamp(h)};
@@ -482,6 +547,8 @@ function openForm(item, presetCat){
   F("f_ing").value = item?(item.ing||[]).join(", "):"";
   F("f_roti").checked = item&&item.with?item.with.includes("roti"):false;
   F("f_rice").checked = item&&item.with?item.with.includes("rice"):false;
+  F("f_health").value = item&&typeof item.health==="number"?String(item.health):"";
+  F("f_protein").value = item&&typeof item.protein==="number"?String(item.protein):"";
   F("deleteBtn").style.display = item?"inline-block":"none";
   syncWithField(); setPreview(); overlay.classList.add("show");
 }
@@ -510,11 +577,18 @@ F("saveBtn").addEventListener("click", ()=>{
   if(cat==="sabji"){ withArr=[]; if(F("f_roti").checked)withArr.push("roti"); if(F("f_rice").checked)withArr.push("rice"); if(!withArr.length)withArr=["roti"]; }
   const ing=F("f_ing").value.split(",").map(s=>s.trim()).filter(Boolean);
   const note=F("f_note").value.trim();
+  const hv=F("f_health").value, pv=F("f_protein").value;
   if(editingId){
     const it=getItem(editingId);
     if(it.cat!==cat){ store.library[it.cat]=store.library[it.cat].filter(x=>x.id!==it.id); store.library[cat].push(it); }
     Object.assign(it,{n:name,cat,with:withArr,note,ing,img:pendingImg});
-  } else { store.library[cat].push({id:uid(),n:name,cat,with:withArr,note,ing,img:pendingImg,rate:null}); }
+    if(hv!=="") it.health=+hv; else delete it.health;
+    if(pv!=="") it.protein=+pv; else delete it.protein;
+  } else {
+    const ni={id:uid(),n:name,cat,with:withArr,note,ing,img:pendingImg,rate:null};
+    if(hv!=="") ni.health=+hv; if(pv!=="") ni.protein=+pv;
+    store.library[cat].push(ni);
+  }
   save(); closeForm(); activeCat=cat; renderCatCol(); renderRows();
 });
 F("deleteBtn").addEventListener("click", ()=>{ if(editingId) removeItem(editingId); });
@@ -527,42 +601,93 @@ function removeItem(id){
 }
 document.getElementById("additem").addEventListener("click", ()=> openForm(null, activeCat));
 
-/* ---------- planner ---------- */
-function optionsFor(slot, selId){
-  let o=`<option value="">— none —</option>`;
-  slot.from.forEach(cat=>{ o+=`<optgroup label="${CATMETA[cat].label}">`; store.library[cat].forEach(it=> o+=`<option value="${it.id}" ${it.id===selId?"selected":""}>${it.n}</option>`); o+=`</optgroup>`; });
-  return o;
-}
+/* ---------- planner (calendar grid) ---------- */
+const DSHORT = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 function renderPlanner(){
-  const el=document.getElementById("days"); let html="";
-  DAYS.forEach((day,di)=>{
-    html+=`<div class="day"><h3>${day}</h3><div class="slots">`;
-    SLOTS.forEach(slot=>{
-      const cell=di+"_"+slot.key; let cur=store.plan[cell]||{};
-      if(cur.name&&!cur.id){ const it=findByName(cur.name); if(it) cur.id=it.id; }
-      html+=`<div class="slot"><label>${slot.label}</label><select data-cell="${cell}" data-role="dish">${optionsFor(slot,cur.id)}</select><div class="with-row" data-withrow="${cell}"></div></div>`;
+  const el = document.getElementById("plangrid");
+  let html = `<div class="pcorner"></div>`;
+  DAYS.forEach((day,di)=> html += `<div class="phead">${DSHORT[di]}<span>${day.slice(0,3)==DSHORT[di]?'':''}</span></div>`);
+  SLOTS.forEach(slot=>{
+    html += `<div class="pmeal"><span class="mdot" style="background:${(CATMETA[slot.from[0]]||{}).color||'var(--accent)'}"></span>${slot.label}</div>`;
+    DAYS.forEach((day,di)=>{
+      const cell = di+"_"+slot.key;
+      let cur = store.plan[cell] || {};
+      if(cur.name && !cur.id){ const it=findByName(cur.name); if(it) cur.id=it.id; }
+      const it = cur.id ? getItem(cur.id) : null;
+      if(it){
+        const bg = it.img ? `<img class="pbg" src="${it.img}" alt=""><div class="pshade"></div>` : `<span class="pemoji">${CATMETA[it.cat].emoji}</span><div class="pshade"></div>`;
+        let withPill = "";
+        if(it.with && it.with.length){
+          withPill = `<button class="pwith" data-cell="${cell}" title="Toggle roti / rice">${withLabel(cur.with||it.with[0])}</button>`;
+        }
+        html += `<div class="pcell"><div class="pcard" data-cell="${cell}" data-di="${di}" data-slot="${slot.key}">
+          ${bg}<button class="pclear" data-clear="${cell}" title="Remove">✕</button>${withPill}
+          <div class="pname">${it.n}</div>
+        </div></div>`;
+      } else {
+        html += `<div class="pcell"><button class="padd" data-di="${di}" data-slot="${slot.key}">+</button></div>`;
+      }
     });
-    html+=`</div></div>`;
   });
-  el.innerHTML=html;
-  el.querySelectorAll('select[data-role="dish"]').forEach(sel=>{
-    const cell=sel.dataset.cell;
-    sel.addEventListener("change", ()=>{ store.plan[cell]=sel.value?{id:sel.value}:{}; save(); renderWithRow(cell); });
-    renderWithRow(cell);
+  el.innerHTML = html;
+  el.querySelectorAll(".pcard").forEach(c=> c.addEventListener("click", e=>{
+    if(e.target.dataset.clear){ store.plan[e.target.dataset.clear]={}; save(); renderPlanner(); return; }
+    if(e.target.classList.contains("pwith")) return;
+    openPicker(+c.dataset.di, c.dataset.slot);
+  }));
+  el.querySelectorAll(".padd").forEach(b=> b.addEventListener("click", ()=> openPicker(+b.dataset.di, b.dataset.slot)));
+  el.querySelectorAll(".pwith").forEach(btn=> btn.addEventListener("click", e=>{
+    e.stopPropagation();
+    const cell=btn.dataset.cell, it=getItem(store.plan[cell].id); if(!it) return;
+    const opts = it.with.length>1 ? it.with.concat("both") : it.with.slice();
+    const cur = store.plan[cell].with || it.with[0];
+    store.plan[cell].with = opts[(opts.indexOf(cur)+1)%opts.length];
+    save(); renderPlanner();
+  }));
+}
+function withLabel(w){ return w==="both" ? "roti + rice" : w; }
+/* picker */
+let pickerCtx = null;
+const pickerOverlay = document.getElementById("pickerOverlay");
+function slotByKey(k){ return SLOTS.find(s=>s.key===k); }
+function openPicker(di, slotKey){
+  pickerCtx = {di, slotKey};
+  const slot = slotByKey(slotKey);
+  document.getElementById("pickerTitle").textContent = `${DAYS[di]} · ${slot.label}`;
+  document.getElementById("pickerSearch").value = "";
+  buildPicker("");
+  pickerOverlay.classList.add("show");
+}
+function buildPicker(term){
+  const slot = slotByKey(pickerCtx.slotKey);
+  const grid = document.getElementById("pickerGrid");
+  let html = "";
+  slot.from.forEach(cat=>{
+    let items = store.library[cat];
+    if(term) items = items.filter(it=>it.n.toLowerCase().includes(term));
+    if(!items.length) return;
+    html += `<div class="pickcat">${CATMETA[cat].label}</div>`;
+    items.forEach(it=>{
+      const bg = it.img ? `<img class="pbg" src="${it.img}" alt=""><div class="pshade"></div>` : `<span class="pemoji">${CATMETA[cat].emoji}</span><div class="pshade"></div>`;
+      html += `<div class="pickitem" data-id="${it.id}">${bg}<div class="pname">${it.n}</div></div>`;
+    });
   });
+  grid.innerHTML = html || `<div class="muted" style="padding:12px">No dishes found.</div>`;
+  grid.querySelectorAll(".pickitem").forEach(b=> b.addEventListener("click", ()=>{
+    const it = getItem(b.dataset.id);
+    const cell = pickerCtx.di+"_"+pickerCtx.slotKey;
+    const e = {id:it.id}; if(it.with && it.with.length) e.with = it.with[0];
+    store.plan[cell] = e; save(); pickerOverlay.classList.remove("show"); renderPlanner();
+  }));
 }
-function renderWithRow(cell){
-  const row=document.querySelector(`[data-withrow="${cell}"]`); if(!row) return;
-  const cur=store.plan[cell]||{}; const it=cur.id?getItem(cur.id):null;
-  if(it&&it.with&&it.with.length){
-    const w=it.with; let opts=""; if(w.length>1) opts+=`<option value="both">with both</option>`;
-    opts+=w.map(x=>`<option value="${x}">with ${x}</option>`).join("");
-    row.innerHTML=`<select data-role="with">${opts}</select>`;
-    const ws=row.querySelector("select"); ws.value=cur.with||w[0];
-    if(!cur.with){ store.plan[cell].with=w[0]; save(); }
-    ws.addEventListener("change", ()=>{ store.plan[cell].with=ws.value; save(); });
-  } else row.innerHTML="";
-}
+document.getElementById("pickerSearch").addEventListener("input", e=> buildPicker(e.target.value.trim().toLowerCase()));
+document.getElementById("pickerClose").addEventListener("click", ()=> pickerOverlay.classList.remove("show"));
+pickerOverlay.addEventListener("click", e=>{ if(e.target===pickerOverlay) pickerOverlay.classList.remove("show"); });
+document.getElementById("pickerClear").addEventListener("click", ()=>{
+  if(!pickerCtx) return;
+  store.plan[pickerCtx.di+"_"+pickerCtx.slotKey] = {}; save();
+  pickerOverlay.classList.remove("show"); renderPlanner();
+});
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 document.getElementById("autofill").addEventListener("click", ()=>{
   const used={breakfast:[],lunch:[],dinner:[],side:[]};
